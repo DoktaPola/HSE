@@ -41,5 +41,5 @@ int main() {
     // THIRD PRINT //
 
 
-    print_queue2(count_files2);
+    print_third_task(count_files2);
 }

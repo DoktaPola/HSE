@@ -35,6 +35,6 @@ void second_task(node *tree, int level, int *amount_arr, int *cAm);
 
 void print_second_task(const int *amount_arr, int cAm);
 
-void print_queue2(int count_files);
+void print_third_task(int count_files);
 
 #endif //CATALOGTREE_CATALOG_TREE_H

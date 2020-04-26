@@ -244,7 +244,7 @@ void  print_second_task(const int *amount_arr, int cAm){
     printf("TOTAL AMOUNT of files in the specified subtree: %d\n\n", cAm);
 }
 
-void print_queue2(int count_files) {
+void print_third_task(int count_files) {
     printf("TASK 3d: \n\n");
     for (int i = 0; i < count_files; ++i) {
         printf("%s\n", pop());
