@@ -383,15 +383,15 @@ c)
 SELECT surname, month, shop.district AS district 
 FROM purchase,shop,buyer
 WHERE buyer.district = ANY(SELECT district
-						   FROM buyer
-						   WHERE buyer.district = shop.district) 
+			   FROM buyer
+			   WHERE buyer.district = shop.district) 
 AND purchase.buyer = buyer.id
 AND purchase.seller = shop.id
 AND purchase.month = ANY(SELECT month
-						 FROM purchase
-						 WHERE purchase.month ='Январь'
-						 OR purchase.month = 'Февраль'
-						 OR purchase.month = 'Март')
+			 FROM purchase
+			 WHERE purchase.month ='Январь'
+			 OR purchase.month = 'Февраль'
+			 OR purchase.month = 'Март')
 ```
 <p align="left">
   <img src="https://imgur.com/DNRQG2F.png" width="600">
@@ -404,8 +404,8 @@ FROM
 (SELECT surname, SUM(price * quantity) sum1
 FROM  purchase, buyer, shop
 WHERE purchase.buyer = ALL(SELECT purchase.buyer
-							FROM purchase 
-							WHERE purchase.buyer = buyer.id)
+			   FROM purchase 
+			   WHERE purchase.buyer = buyer.id)
 AND purchase.seller=shop.id
 AND buyer.district != shop.district
 GROUP BY surname, buyer.id )t, purchase, buyer
