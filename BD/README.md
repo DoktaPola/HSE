@@ -39,8 +39,10 @@ price integer NOT NULL
 );
 ```
 <p align="left">
-  <img src="https://imgur.com/f1XVyvj" width="600">
-  <img src="https://imgur.com/zHfTRPt" width="600">
+  <img src="https://i.imgur.com/f1XVyvj.png" width="600">
+</p>
+<p align="left">
+  <img src="https://i.imgur.com/zHfTRPt.png" width="600">
 </p>
 
 № 2.
@@ -57,7 +59,7 @@ VALUES
 (006,'Попов','Советский',0);
 ```
 <p align="left">
-  <img src="https://imgur.com/PCfIioC" width="600">
+  <img src="https://i.imgur.com/PCfIioC.png" width="600">
 </p>
 
 ```sql
@@ -71,7 +73,7 @@ VALUES
 (005,'Книги','Советский',7)
 ```
 <p align="left">
-  <img src="https://imgur.com/XPQH5lr" width="600">
+  <img src="https://i.imgur.com/XPQH5lr.png" width="600">
 </p>
 
 ```sql
@@ -86,7 +88,7 @@ INSERT INTO books
 (007,'Твой первый выход в Internet',15000,'Советский',140)
 ```
 <p align="left">
-  <img src="https://imgur.com/gbCV4yF" width="600">
+  <img src="https://i.imgur.com/gbCV4yF.png" width="600">
 </p>
 
 ```sql
@@ -111,7 +113,7 @@ VALUES
 (10027,'Июнь',003,002,006,2,32000)
 ```
 <p align="left">
-  <img src="https://imgur.com/3iSEk7U" width="600">
+  <img src="https://i.imgur.com/3iSEk7U.png" width="600">
 </p>
 
 № 3.
@@ -120,14 +122,14 @@ VALUES
 SELECT LPAD(id::text,3,'0') as id,surname,district,discount from buyer
 ```
 <p align="left">
-  <img src="https://imgur.com/fwisovu" width="600">
+  <img src="https://i.imgur.com/fwisovu.png" width="600">
 </p>
 
 ```sql
 SELECT LPAD(id::text,3,'0') as id, name,district, commission_fees from shop
 ```
 <p align="left">
-  <img src="https://imgur.com/57FsCTO" width="600">
+  <img src="https://i.imgur.com/57FsCTO.png" width="600">
 </p>
 
 ```sql
@@ -135,7 +137,7 @@ SELECT LPAD(id::text,3,'0') as id, title,price,repo,quantity from books
 ```
 
 <p align="left">
-  <img src="https://imgur.com/7GvvwIv" width="600">
+  <img src="https://i.imgur.com/7GvvwIv.png" width="600">
 </p>
 
 ```sql
@@ -144,25 +146,25 @@ LPAD (book::text,3,'0') as book, quantity,price from purchase
 ```
 
 <p align="left">
-  <img src="https://imgur.com/JwmDY2A" width="600">
+  <img src="https://i.imgur.com/JwmDY2A.png" width="600">
 </p>
 
 ## или
 
 <p align="left">
-  <img src="https://imgur.com/diraYUM" width="600">
+  <img src="https://i.imgur.com/diraYUM.png" width="600">
 </p>
 
 <p align="left">
-  <img src="https://imgur.com/TMRfP6k" width="600">
+  <img src="https://i.imgur.com/TMRfP6k.png" width="600">
 </p>
 
 <p align="left">
-  <img src="https://imgur.com/A3ZNRBD" width="600">
+  <img src="https://imgur.com/A3ZNRBD.png" width="600">
 </p>
 
 <p align="left">
-  <img src="https://imgur.com/bt08gIL" width="600">
+  <img src="https://imgur.com/bt08gIL.png" width="600">
 </p>
 
 № 4.
@@ -172,7 +174,7 @@ SELECT title, price
 FROM books;
 ```
 <p align="left">
-  <img src="https://imgur.com/datu2uW" width="600">
+  <img src="https://imgur.com/datu2uW.png" width="600">
 </p>
 
 b)
@@ -181,7 +183,7 @@ SELECT district
 FROM buyer; 
 ```
 <p align="left">
-  <img src="https://imgur.com/jlRQpcQ" width="600">
+  <img src="https://imgur.com/jlRQpcQ.png" width="600">
 </p>
 
 c)
@@ -190,7 +192,7 @@ SELECT month
 FROM purchase; 
 ```
 <p align="left">
-  <img src="https://imgur.com/XR6njm0" width="600">
+  <img src="https://imgur.com/XR6njm0.png" width="600">
 </p>
 
 № 5.
@@ -201,7 +203,7 @@ FROM buyer
 WHERE district = 'Нижегородский';
 ```
 <p align="left">
-  <img src="https://imgur.com/YzAdsIq" width="600">
+  <img src="https://imgur.com/YzAdsIq.png" width="600">
 </p>
 
 b)
@@ -211,7 +213,7 @@ FROM shop
 WHERE district = 'Сормовский' or district = 'Советский';
 ```
 <p align="left">
-  <img src="https://imgur.com/VEnGUzF" width="600">
+  <img src="https://imgur.com/VEnGUzF.png" width="600">
 </p>
 
 c)
@@ -222,7 +224,7 @@ WHERE title LIKE '%Windows%' or price > 20000
 ORDER BY  price DESC 
 ```
 <p align="left">
-  <img src="https://imgur.com/9U4winu" width="600">
+  <img src="https://imgur.com/9U4winu.png" width="600">
 </p>
 
 № 6.
@@ -232,7 +234,7 @@ SELECT distinct title,surname,name from buyer,shop,purchase,books
 where buyer.id=purchase.buyer and purchase.seller=shop.id and purchase.book = books.id
 ```
 <p align="left">
-  <img src="https://imgur.com/wYr5Nbe" width="600">
+  <img src="https://imgur.com/wYr5Nbe.png" width="600">
 </p>
 
 b)
@@ -241,7 +243,7 @@ SELECT title,month,surname,discount,purchase.quantity as quantity from purchase,
 where purchase.buyer=buyer.id and books.id=purchase.book
 ```
 <p align="left">
-  <img src="https://imgur.com/LbXjDrc" width="600">
+  <img src="https://imgur.com/LbXjDrc.png" width="600">
 </p>
 
 № 7.
@@ -251,7 +253,7 @@ SELECT order_number,surname,month from purchase,buyer
 where purchase.price > 60000 and buyer.id = purchase.buyer
 ```
 <p align="left">
-  <img src="https://imgur.com/OJDSeSE" width="600">
+  <img src="https://imgur.com/OJDSeSE.png" width="600">
 </p>
 
 b)
@@ -264,7 +266,7 @@ or purchase.month = 'Февраль'
 or purchase.month = 'Март')
 ```
 <p align="left">
-  <img src="https://imgur.com/dPWOE6n" width="600">
+  <img src="https://imgur.com/dPWOE6n.png" width="600">
 </p>
 
 c)
@@ -277,7 +279,7 @@ and shop.district != 'Автозаводский'
 and buyer.discount BETWEEN 10 AND 15
 ```
 <p align="left">
-  <img src="https://imgur.com/tpceD2r" width="600">
+  <img src="https://imgur.com/tpceD2r.png" width="600">
 </p>
 
 d)
@@ -290,7 +292,7 @@ and books.quantity > 10
 ORDER BY books.price ASC
 ```
 <p align="left">
-  <img src="https://imgur.com/DoKNgm3" width="600">
+  <img src="https://imgur.com/DoKNgm3.png" width="600">
 </p>
 
 № 8.
@@ -301,7 +303,7 @@ SELECT order_number,month, LPAD(seller::text,3,'0') as seller, LPAD(buyer::text,
 LPAD (book::text,3,'0') as book, quantity,price from purchase
 ```
 <p align="left">
-  <img src="https://imgur.com/HoKdgD2" width="600">
+  <img src="https://imgur.com/HoKdgD2.png" width="600">
 </p>
 
 № 9.
@@ -312,7 +314,7 @@ UPDATE purchase SET commission_fees = (SELECT shop.commission_fees FROM shop WHE
 SELECT * FROM purchase  -- проверка
 ```
 <p align="left">
-  <img src="https://imgur.com/3yfES2C" width="600">
+  <img src="https://imgur.com/3yfES2C.png" width="600">
 </p>
 
 ## Уровень 2.
@@ -324,7 +326,7 @@ select * from buyer
 where id not in (select buyer from purchase where month in ('Июнь'))
 ```
 <p align="left">
-  <img src="https://imgur.com/ebZsQlk" width="600">
+  <img src="https://imgur.com/ebZsQlk.png" width="600">
 </p>
 
 b)
@@ -338,7 +340,7 @@ SELECT distinct order_number, surname , month from purchase,buyer
 where purchase.price > 60000 and surname in (select surname from buyer where buyer.id = purchase.buyer);
 ```
 <p align="left">
-  <img src="https://imgur.com/dASlhJ7" width="600">
+  <img src="https://imgur.com/dASlhJ7.png" width="600">
 </p>
 
 № 11.
@@ -354,7 +356,7 @@ WHERE discount = ALL (SELECT MIN(discount)
 						   AND purchase.price >= 50000)
 ```
 <p align="left">
-  <img src="https://imgur.com/YcguBvN" width="600">
+  <img src="https://imgur.com/YcguBvN.png" width="600">
 </p>
 
 b)
@@ -373,7 +375,7 @@ SELECT t.surname, max(t.amount) as Highest
  limit 1
 ```
 <p align="left">
-  <img src="https://imgur.com/wKBxNO2" width="600">
+  <img src="https://imgur.com/wKBxNO2.png" width="600">
 </p>
 
 c)
@@ -392,7 +394,7 @@ AND purchase.month = ANY(SELECT month
 						 OR purchase.month = 'Март')
 ```
 <p align="left">
-  <img src="https://imgur.com/DNRQG2F" width="600">
+  <img src="https://imgur.com/DNRQG2F.png" width="600">
 </p>
 
 d)
@@ -412,7 +414,7 @@ ORDER BY Lowest ASC
 LIMIT 1
 ```
 <p align="left">
-  <img src="https://imgur.com/bdAGXdO" width="600">
+  <img src="https://imgur.com/bdAGXdO.png" width="600">
 </p>
 
 № 12.
@@ -422,7 +424,7 @@ union
 select repo from books
 ```
 <p align="left">
-  <img src="https://imgur.com/gYh7qxg" width="600">
+  <img src="https://imgur.com/gYh7qxg.png" width="600">
 </p>
 
 № 13.
@@ -436,7 +438,7 @@ a)
 select avg(price) from purchase;
 ```
 <p align="left">
-  <img src="https://imgur.com/4ivmm3X" width="600">
+  <img src="https://imgur.com/4ivmm3X.png" width="600">
 </p>
 
 b)
@@ -445,7 +447,7 @@ select count(buyer) from purchase,shop
 where purchase.seller=shop.id and shop.name='Наука'
 ```
 <p align="left">
-  <img src="https://imgur.com/ngAmHsZ" width="600">
+  <img src="https://imgur.com/ngAmHsZ.png" width="600">
 </p>
 
 c)
@@ -454,7 +456,7 @@ select avg(discount) from buyer;
 select * from buyer where discount > (select avg(discount) from buyer)
 ```
 <p align="left">
-  <img src="https://imgur.com/c5MoEcM" width="600">
+  <img src="https://imgur.com/c5MoEcM.png" width="600">
 </p>
 
 d)
@@ -465,7 +467,7 @@ group by (seller) having count(*) > (select count(buyer) from purchase,shop
 where purchase.seller=shop.id and shop.name='Наука'))
 ```
 <p align="left">
-  <img src="https://imgur.com/F289MiM" width="600">
+  <img src="https://imgur.com/F289MiM.png" width="600">
 </p>
 
 № 15.
@@ -477,7 +479,7 @@ where purchase.seller=shop.id and purchase.buyer=buyer.id
 group by name
 ```
 <p align="left">
-  <img src="https://imgur.com/gP5YLdW" width="600">
+  <img src="https://imgur.com/gP5YLdW.png" width="600">
 </p>
 
 b)
@@ -488,7 +490,7 @@ where purchase.seller=shop.id and purchase.buyer=buyer.id
 group by shop.district,name
 ```
 <p align="left">
-  <img src="https://imgur.com/5hCL2Oj" width="600">
+  <img src="https://imgur.com/5hCL2Oj.png" width="600">
 </p>
 
 c)
@@ -499,7 +501,7 @@ where purchase.buyer=buyer.id
 group by surname, buyer.id
 ```
 <p align="left">
-  <img src="https://imgur.com/Jlf0AT0" width="600">
+  <img src="https://imgur.com/Jlf0AT0.png" width="600">
 </p>
 
 d)
@@ -510,5 +512,5 @@ where purchase.seller = shop.id AND shop.district != 'Советский'
 group by month
 ```
 <p align="left">
-  <img src="https://imgur.com/4V3GoUm" width="600">
+  <img src="https://imgur.com/4V3GoUm.png" width="600">
 </p>
