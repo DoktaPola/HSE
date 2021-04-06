@@ -4,7 +4,7 @@
 * ***Конина Татьяна*** 
 * ***Ожиганова Полина***
 
-№ 1. 
+### № 1. 
 ```sql
 CREATE TABLE buyer (
 id SERIAL PRIMARY KEY, -- индетификатор
@@ -45,7 +45,7 @@ price integer NOT NULL
   <img src="https://i.imgur.com/zHfTRPt.png" width="600">
 </p>
 
-№ 2.
+### № 2.
 
 ```sql
 INSERT INTO buyer 
@@ -116,7 +116,7 @@ VALUES
   <img src="https://i.imgur.com/3iSEk7U.png" width="600">
 </p>
 
-№ 3.
+### № 3.
 
 ```sql
 SELECT LPAD(id::text,3,'0') as id,surname,district,discount from buyer
@@ -137,7 +137,7 @@ SELECT LPAD(id::text,3,'0') as id, title,price,repo,quantity from books
 ```
 
 <p align="left">
-  <img src="https://i.imgur.com/7GvvwIv.png" width="600">
+  <img src="https://i.imgur.com/dQtSw47.png" width="600">
 </p>
 
 ```sql
@@ -146,7 +146,7 @@ LPAD (book::text,3,'0') as book, quantity,price from purchase
 ```
 
 <p align="left">
-  <img src="https://i.imgur.com/JwmDY2A.png" width="600">
+  <img src="https://i.imgur.com/AEcOGq9.png" width="600">
 </p>
 
 ## или
@@ -167,7 +167,7 @@ LPAD (book::text,3,'0') as book, quantity,price from purchase
   <img src="https://imgur.com/bt08gIL.png" width="600">
 </p>
 
-№ 4.
+### № 4.
 a)
 ```sql
 SELECT title, price
@@ -195,7 +195,7 @@ FROM purchase;
   <img src="https://imgur.com/XR6njm0.png" width="600">
 </p>
 
-№ 5.
+### № 5.
 a)
 ```sql
 SELECT surname, discount
@@ -227,14 +227,16 @@ ORDER BY  price DESC
   <img src="https://imgur.com/9U4winu.png" width="600">
 </p>
 
-№ 6.
-a) Если нужно было вывести только название книги
+### № 6.
+a) 
 ```sql
-SELECT distinct title,surname,name from buyer,shop,purchase,books
-where buyer.id=purchase.buyer and purchase.seller=shop.id and purchase.book = books.id
+SELECT distinct order_number, title as BookName, purchase.buyer as bID, surname, name as ShopName
+from buyer,shop,purchase,books
+where buyer.id=purchase.buyer and purchase.seller=shop.id 
+and purchase.book = books.id and purchase.buyer = buyer.id
 ```
 <p align="left">
-  <img src="https://imgur.com/wYr5Nbe.png" width="600">
+  <img src="https://i.imgur.com/MPjbzoS.png" width="600">
 </p>
 
 b)
@@ -246,32 +248,33 @@ where purchase.buyer=buyer.id and books.id=purchase.book
   <img src="https://imgur.com/LbXjDrc.png" width="600">
 </p>
 
-№ 7.
+### № 7.
 a)
 ```sql
 SELECT order_number,surname,month from purchase,buyer
 where purchase.price > 60000 and buyer.id = purchase.buyer
 ```
 <p align="left">
-  <img src="https://imgur.com/OJDSeSE.png" width="600">
+  <img src="https://i.imgur.com/O7UTVK2.png" width="600">
 </p>
 
 b)
 ```sql
-SELECT surname,month,shop.district as district from purchase,shop,buyer where
-buyer.district = shop.district and purchase.buyer = buyer.id
-and purchase.seller = shop.id
-and (purchase.month ='Январь'
-or purchase.month = 'Февраль'
-or purchase.month = 'Март')
+SELECT distinct surname,month,shop.district as district 
+from purchase,shop,buyer
+where buyer.district = shop.district 
+and purchase.buyer = buyer.id and purchase.seller = shop.id
+and (purchase.month ='Март' or purchase.month = 'Апрель'
+or purchase.month = 'Май' or purchase.month = 'Июнь')
+ORDER BY surname 
 ```
 <p align="left">
-  <img src="https://imgur.com/dPWOE6n.png" width="600">
+  <img src="https://i.imgur.com/AiDNckZ.png" width="600">
 </p>
 
 c)
 ```sql
-SELECT name
+SELECT distinct name,  shop.id
 FROM purchase, shop, buyer
 WHERE purchase.buyer = buyer.id
 and purchase.seller = shop.id
@@ -279,7 +282,7 @@ and shop.district != 'Автозаводский'
 and buyer.discount BETWEEN 10 AND 15
 ```
 <p align="left">
-  <img src="https://imgur.com/tpceD2r.png" width="600">
+  <img src="https://i.imgur.com/yCtLlr8.png" width="600">
 </p>
 
 d)
@@ -295,7 +298,7 @@ ORDER BY books.price ASC
   <img src="https://imgur.com/DoKNgm3.png" width="600">
 </p>
 
-№ 8.
+### № 8.
 ```sql
 update purchase set price = purchase.price * (100 - buyer.discount)/100
 from buyer where purchase.buyer = buyer.id;
@@ -306,7 +309,7 @@ LPAD (book::text,3,'0') as book, quantity,price from purchase
   <img src="https://imgur.com/HoKdgD2.png" width="600">
 </p>
 
-№ 9.
+### № 9.
 ```sql
 ALTER TABLE purchase ADD commission_fees integer CHECK (commission_fees >= 0);
 UPDATE purchase SET commission_fees = (SELECT shop.commission_fees FROM shop WHERE shop.id = purchase.seller);
@@ -319,10 +322,11 @@ SELECT * FROM purchase  -- проверка
 
 ## Уровень 2.
 
-№ 10.
+### № 10.
 a)
 ```sql
-select * from buyer
+select * 
+from buyer
 where id not in (select buyer from purchase where month in ('Июнь'))
 ```
 <p align="left">
@@ -334,8 +338,9 @@ b)
 
 ```
 
-c) внимание!! тут результат отличается от 7а, так как мы в 8 поменяли последнюю колонку!!!!
+c)
 ```sql
+-- (7a)
 SELECT distinct order_number, surname , month from purchase,buyer
 where purchase.price > 60000 and surname in (select surname from buyer where buyer.id = purchase.buyer);
 ```
@@ -343,7 +348,18 @@ where purchase.price > 60000 and surname in (select surname from buyer where buy
   <img src="https://imgur.com/dASlhJ7.png" width="600">
 </p>
 
-№ 11.
+```sql
+-- (7c)
+select * from shop where id in
+(select shop.id as id from shop,purchase,buyer
+where buyer.discount >= 10 and buyer.discount <= 15 
+and shop.district != 'Автозаводский') 
+```
+<p align="left">
+  <img src="https://i.imgur.com/6wJERf5.png" width="600">
+</p>
+
+### № 11.
 a)
 ```sql
 SELECT *
@@ -380,21 +396,21 @@ SELECT t.surname, max(t.amount) as Highest
 
 c)
 ```sql
-SELECT surname, month, shop.district AS district 
+SELECT distinct surname, month, shop.district AS district 
 FROM purchase,shop,buyer
 WHERE buyer.district = ANY(SELECT district
-			   FROM buyer
-			   WHERE buyer.district = shop.district) 
+						   FROM buyer
+						   WHERE buyer.district = shop.district) 
 AND purchase.buyer = buyer.id
 AND purchase.seller = shop.id
 AND purchase.month = ANY(SELECT month
-			 FROM purchase
-			 WHERE purchase.month ='Январь'
-			 OR purchase.month = 'Февраль'
-			 OR purchase.month = 'Март')
+						 FROM purchase
+						 WHERE purchase.month ='Март' or purchase.month = 'Апрель'
+						 or purchase.month = 'Май' or purchase.month = 'Июнь')
+ORDER BY surname 
 ```
 <p align="left">
-  <img src="https://imgur.com/DNRQG2F.png" width="600">
+  <img src="https://i.imgur.com/LeL7gjE.png" width="600">
 </p>
 
 d)
@@ -404,8 +420,8 @@ FROM
 (SELECT surname, SUM(price * quantity) sum1
 FROM  purchase, buyer, shop
 WHERE purchase.buyer = ALL(SELECT purchase.buyer
-			   FROM purchase 
-			   WHERE purchase.buyer = buyer.id)
+							FROM purchase 
+							WHERE purchase.buyer = buyer.id)
 AND purchase.seller=shop.id
 AND buyer.district != shop.district
 GROUP BY surname, buyer.id )t, purchase, buyer
@@ -417,7 +433,7 @@ LIMIT 1
   <img src="https://imgur.com/bdAGXdO.png" width="600">
 </p>
 
-№ 12.
+### № 12.
 ```sql
 select district from buyer
 union
@@ -427,12 +443,50 @@ select repo from books
   <img src="https://imgur.com/gYh7qxg.png" width="600">
 </p>
 
-№ 13.
+### № 13.
+a)
 ```sql
-
+SELECT distinct buyer
+FROM purchase as buyer_id
+WHERE EXISTS (
+SELECT *
+FROM purchase where buyer_id.buyer not in
+(SELECT purchase.buyer
+FROM purchase
+WHERE purchase.seller != 1 and seller != 2))
 ```
+<p align="left">
+  <img src="https://i.imgur.com/LAMK1hV.png" width="600">
+</p>
 
-№ 14.
+b) до апреля ( в задании написан декабрь, но его нет в списке),
+   PS: вы разорешили выбрать другой месяц.
+```sql
+SELECT distinct buyer
+FROM purchase as buyer_id
+WHERE NOT EXISTS (
+			SELECT purchase.buyer
+			FROM purchase
+			where buyer_id.buyer 
+	not in
+	
+			(SELECT purchase.buyer
+			FROM purchase, buyer, shop
+			WHERE purchase.buyer = buyer.id
+			AND purchase.seller = shop.id
+			AND buyer.district = shop.district
+			and (purchase.month = 'Январь'
+			or purchase.month = 'Февраль'
+			or purchase.month = 'Март')))
+```
+<p align="left">
+  <img src="https://i.imgur.com/tHE2Bqo.png" width="600">
+</p>
+
+c)
+d)
+
+### № 14.
 a)
 ```sql
 select avg(price) from purchase;
@@ -447,7 +501,7 @@ select count(buyer) from purchase,shop
 where purchase.seller=shop.id and shop.name='Наука'
 ```
 <p align="left">
-  <img src="https://imgur.com/ngAmHsZ.png" width="600">
+  <img src="https://imgur.com/ngAmHsZ.png" width="300">
 </p>
 
 c)
@@ -470,7 +524,7 @@ where purchase.seller=shop.id and shop.name='Наука'))
   <img src="https://imgur.com/F289MiM.png" width="600">
 </p>
 
-№ 15.
+### № 15.
 a)
 ```sql
 select name, SUM(price * quantity)
@@ -504,7 +558,9 @@ group by surname, buyer.id
   <img src="https://imgur.com/Jlf0AT0.png" width="600">
 </p>
 
-d)
+d) В задании для каждого дня недели, 
+   однако у нас в таблице представлены 
+   только месяцы.
 ```sql
 select month, SUM(quantity) as amount
 from purchase, shop
