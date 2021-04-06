@@ -4,7 +4,26 @@
 * ***Конина Татьяна*** 
 * ***Ожиганова Полина***
 
+# Вариант I
+
 ### № 1. 
+	Дана схема базы данных в виде следующих отношений.  С помощью операторов SQL создать логическую структуру 
+    соответствующих таблиц для хранения в СУБД, используя известные средства поддержания целостности (NOT NULL,
+     UNIQUE, и т.д.). Обосновать выбор типов данных и используемые средства поддержания целостности. При выборе 
+     подходящих типов данных использовать информацию о конкретных значениях полей БД (см. прил.1)
+	
+	ПОКУПАТЕЛЬ
+	ИДЕНТИФИКАТОР 		ФАМИЛИЯ		 РАЙОН ПРОЖИВАНИЯ 		СКИДКА, %
+	
+	МАГАЗИН
+	ИДЕНТИФИКАТОР 		НАЗВАНИЕ 		РАЙОН РАЗМЕЩЕНИЯ 		КОММИСИОННЫЕ % 
+	
+	КНИГИ
+	ИДЕНТИФИКАТОР 		НАЗВАНИЕ 		СТОИМОСТЬ, РУБ. 		СКЛАД 		КОЛ-ВО 
+	
+	ПОКУПКА
+	НОМЕР ЗАКАЗА 		ДАТА 		ПРОДАВЕЦ 		ПОКУПАТЕЛЬ 		КНИГА		КОЛ-ВО 		СУММА, РУБ 
+
 ```sql
 CREATE TABLE buyer (
 id SERIAL PRIMARY KEY, -- индетификатор
@@ -46,7 +65,8 @@ price integer NOT NULL
 </p>
 
 ### № 2.
-
+	Ввести в ранее созданные таблицы конкретные данные (см. прил. 1). Использовать скрипт-файл из операторов INSERT 
+    или вспомогательную утилиту .
 ```sql
 INSERT INTO buyer 
 (id, surname, district ,discount) 
@@ -117,7 +137,8 @@ VALUES
 </p>
 
 ### № 3.
-
+	Используя оператор SELECT создать запрос для вывода всех строк каждой таблицы. Проверить правильность ввода.
+	При необходимости произвести коррекцию значений операторами INSERT, UPDATE, DELETE. 
 ```sql
 SELECT LPAD(id::text,3,'0') as id,surname,district,discount from buyer
 ```
@@ -168,7 +189,8 @@ LPAD (book::text,3,'0') as book, quantity,price from purchase
 </p>
 
 ### № 4.
-a)
+	Создать запросы для вывода: 
+a) всех различных названий и стоимостей книг;
 ```sql
 SELECT title, price
 FROM books;
@@ -177,7 +199,7 @@ FROM books;
   <img src="https://imgur.com/datu2uW.png" width="600">
 </p>
 
-b)
+b) всех различных районов, в которых проживают покупатели;
 ```sql
 SELECT district
 FROM buyer; 
@@ -186,7 +208,7 @@ FROM buyer;
   <img src="https://imgur.com/jlRQpcQ.png" width="600">
 </p>
 
-c)
+c) всех различных месяцев, когда производились покупки;
 ```sql
 SELECT month
 FROM purchase; 
@@ -196,7 +218,8 @@ FROM purchase;
 </p>
 
 ### № 5.
-a)
+	Создать запросы для получения инорфмации о: 
+a) фамилиях и размере скидки всех покупателей, проживающих в Нижегородском районе;
 ```sql
 SELECT surname, discount
 FROM buyer
@@ -206,7 +229,7 @@ WHERE district = 'Нижегородский';
   <img src="https://imgur.com/YzAdsIq.png" width="600">
 </p>
 
-b)
+b) названиях магазинов Сормовского или Советского районов;
 ```sql
 SELECT name
 FROM shop
@@ -216,7 +239,8 @@ WHERE district = 'Сормовский' or district = 'Советский';
   <img src="https://imgur.com/VEnGUzF.png" width="600">
 </p>
 
-c)
+c) Названиях  и стоимости книг, в которых встречается слово Windows, или стоящих более 20000 руб.
+   Вывод результатов организовать по названию и убыванию цены книг;
 ```sql
 SELECT title, price
 FROM books
@@ -228,7 +252,8 @@ ORDER BY  price DESC
 </p>
 
 ### № 6.
-a) 
+	Для каждой покупки вывести следующие данные:
+a)  фамилию покупателя и название магазина, где производилась покупка;
 ```sql
 SELECT distinct order_number, title as BookName, purchase.buyer as bID, surname, name as ShopName
 from buyer,shop,purchase,books
@@ -239,7 +264,7 @@ and purchase.book = books.id and purchase.buyer = buyer.id
   <img src="https://i.imgur.com/MPjbzoS.png" width="600">
 </p>
 
-b)
+b) дату, фамилию покупателя, скидку, название и количество купленных книг;
 ```sql
 SELECT title,month,surname,discount,purchase.quantity as quantity from purchase,buyer,books
 where purchase.buyer=buyer.id and books.id=purchase.book
@@ -249,7 +274,8 @@ where purchase.buyer=buyer.id and books.id=purchase.book
 </p>
 
 ### № 7.
-a)
+	Определить:
+a)	номер заказа, фамилию покупателя и дату для покупок в которых было продано книг на сумму не меньшую чем 60000 руб.
 ```sql
 SELECT order_number,surname,month from purchase,buyer
 where purchase.price > 60000 and buyer.id = purchase.buyer
@@ -258,7 +284,8 @@ where purchase.price > 60000 and buyer.id = purchase.buyer
   <img src="https://i.imgur.com/O7UTVK2.png" width="600">
 </p>
 
-b)
+b)	покупки, сделанные покупателем в своем районе не ранее марта месяца.
+    Вывести фамилию покупателя, район, дату. Произвести сортировку;
 ```sql
 SELECT distinct surname,month,shop.district as district 
 from purchase,shop,buyer
@@ -272,7 +299,7 @@ ORDER BY surname
   <img src="https://i.imgur.com/AiDNckZ.png" width="600">
 </p>
 
-c)
+c)	магазины, расположенные в любом районе, кроме Автозаводского, где покупали книги те, у кого скидка от 10 до 15 %;
 ```sql
 SELECT distinct name,  shop.id
 FROM purchase, shop, buyer
@@ -285,7 +312,9 @@ and buyer.discount BETWEEN 10 AND 15
   <img src="https://i.imgur.com/yCtLlr8.png" width="600">
 </p>
 
-d)
+d)	данные по покупке книг (название, район складирования, количество), приобретенных в районе складирования
+    и содержащихся в запасе более 10 штук. 
+    Включить данные о стоимости и отсортировать по возрастанию;
 ```sql
 SELECT DISTINCT books.title, books.price, books.repo, purchase.quantity 
 FROM books, purchase, shop
@@ -299,6 +328,9 @@ ORDER BY books.price ASC
 </p>
 
 ### № 8.
+	Создать запрос для модификации всех значений столбца с суммарной величиной покупки, 
+	чтобы он содержал истинную сумму, оплачиваемую покупателем ( с учетом скидки). 
+    Вывести новые значения.
 ```sql
 update purchase set price = purchase.price * (100 - buyer.discount)/100
 from buyer where purchase.buyer = buyer.id;
@@ -310,6 +342,8 @@ LPAD (book::text,3,'0') as book, quantity,price from purchase
 </p>
 
 ### № 9.
+	Расширить таблицу с данными о покупке столбцом, содержащим величину коммисионных, получаемых магазином. 
+    Создать запрос для ввода конкретных значений во все строки таблицы покупок.
 ```sql
 ALTER TABLE purchase ADD commission_fees integer CHECK (commission_fees >= 0);
 UPDATE purchase SET commission_fees = (SELECT shop.commission_fees FROM shop WHERE shop.id = purchase.seller);
@@ -323,7 +357,8 @@ SELECT * FROM purchase  -- проверка
 ## Уровень 2.
 
 ### № 10.
-a)
+	Используя операцию IN (NOT IN)  реализовать следующие запросы:
+a)	найти покупателей, которые не покупали книг в магазинах Нижегородского района в июне месяце;
 ```sql
 select * 
 from buyer
@@ -333,12 +368,12 @@ where id not in (select buyer from purchase where month in ('Июнь'))
   <img src="https://imgur.com/ebZsQlk.png" width="600">
 </p>
 
-b)
+b)	найти покупателей, покупавших книги в мае на сумму, меньшую чем купил Потапов в том же месяце;
 ```sql
 
 ```
 
-c)
+c)	реализовать запросы заданий 7.а, 7.с.
 ```sql
 -- (7a)
 SELECT distinct order_number, surname , month from purchase,buyer
@@ -360,7 +395,8 @@ and shop.district != 'Автозаводский')
 </p>
 
 ### № 11.
-a)
+	Используя операции ALL-ANY реализовать следующие запросы:
+a)	определить покупателя, имеющего минимальную скидку среди тех, кто покупал книги на сумму не менее 50000руб.
 ```sql
 SELECT *
 FROM buyer
@@ -375,7 +411,7 @@ WHERE discount = ALL (SELECT MIN(discount)
   <img src="https://imgur.com/YcguBvN.png" width="600">
 </p>
 
-b)
+b)	найти покупателя, покупавшего самое большое количество книг;
 ```sql
 SELECT t.surname, max(t.amount) as Highest
    FROM (
@@ -394,7 +430,7 @@ SELECT t.surname, max(t.amount) as Highest
   <img src="https://imgur.com/wKBxNO2.png" width="600">
 </p>
 
-c)
+c)	запрос задания 7.b;
 ```sql
 SELECT distinct surname, month, shop.district AS district 
 FROM purchase,shop,buyer
@@ -413,7 +449,7 @@ ORDER BY surname
   <img src="https://i.imgur.com/LeL7gjE.png" width="600">
 </p>
 
-d)
+d)	какой из покупателей не покупавший книг в магазинах своего района, делал покупки на минимальную сумму.
 ```sql
 SELECT t.surname, MIN(t.sum1) AS Lowest
 FROM
@@ -434,6 +470,7 @@ LIMIT 1
 </p>
 
 ### № 12.
+    Используя операцию UNION получить районы проживания покупателей и районы складирования книг.
 ```sql
 select district from buyer
 union
@@ -444,7 +481,9 @@ select repo from books
 </p>
 
 ### № 13.
-a)
+    Используя операцию EXISTS ( NOT EXISTS ) реализовать нижеследующие запросы.
+    В случае, если для текущего состояния БД запрос будет выдавать пустое множество строк, требуется указать какие добавления в БД необходимо провести.
+a)	какой покупатель покупал все книги в магазине “Наука” или “Знание”;
 ```sql
 SELECT distinct buyer
 FROM purchase as buyer_id
@@ -459,8 +498,9 @@ WHERE purchase.seller != 1 and seller != 2))
   <img src="https://i.imgur.com/LAMK1hV.png" width="600">
 </p>
 
-b) До апреля не включительно ( в задании написан декабрь, но его нет в списке)  
-   PS: вы разорешили выбрать другой месяц.
+b)	найти покупателей, покупавших книги во всех магазинах своего района до декабря;
+!!! До апреля не включительно ( в задании написан декабрь, но его нет в списке)  
+   PS: вы разорешили выбрать другой месяц.!!!
 ```sql
 SELECT distinct buyer
 FROM purchase as buyer_id
@@ -483,11 +523,13 @@ WHERE NOT EXISTS (
   <img src="https://i.imgur.com/tHE2Bqo.png" width="600">
 </p>
 
-c)
-d)
+c)	определить покупателей, покупавших все книги, не продающиеся в магазине с максимальным значением комиссионных;
+d)	найти среди покупателей тех, кто не покупал с мае книг со ценой более 25000руб. 
+    в магазинах с максимальным размером комиссионных.
 
 ### № 14.
-a)
+	Реализовать запросы с использованием аггрегатных функций:
+a)	получить среднюю стоимость покупок, сделанных в магазинах Нижегородского района;
 ```sql
 select avg(price) from purchase;
 ```
@@ -495,7 +537,7 @@ select avg(price) from purchase;
   <img src="https://imgur.com/4ivmm3X.png" width="600">
 </p>
 
-b)
+b)	найти количество покупателей, покупавших книги в магазине “Наука”;
 ```sql
 select count(buyer) from purchase,shop
 where purchase.seller=shop.id and shop.name='Наука'
@@ -504,7 +546,7 @@ where purchase.seller=shop.id and shop.name='Наука'
   <img src="https://imgur.com/ngAmHsZ.png" width="300">
 </p>
 
-c)
+c)	найти покупателей имеющих скидку ниже средней;
 ```sql
 select avg(discount) from buyer;
 select * from buyer where discount > (select avg(discount) from buyer)
@@ -513,7 +555,7 @@ select * from buyer where discount > (select avg(discount) from buyer)
   <img src="https://imgur.com/c5MoEcM.png" width="600">
 </p>
 
-d)
+d)	определить магазины, в которых покупало книги больше покупателей чем в магазине “Наука”;
 ```sql
 select * from shop where id in (
 SELECT seller from purchase
@@ -525,7 +567,8 @@ where purchase.seller=shop.id and shop.name='Наука'))
 </p>
 
 ### № 15.
-a)
+    Используя средства группировки реализовать следующие запросы:
+a)	вывести данные по суммарной стоимости книг, купленных в каждом магазине;
 ```sql
 select name, SUM(price * quantity)
 from shop,purchase,buyer
@@ -536,7 +579,7 @@ group by name
   <img src="https://imgur.com/gP5YLdW.png" width="600">
 </p>
 
-b)
+b)	вывести отчет о суммарной стоимости всех купленных книг по районам, где расположены магазины;
 ```sql
 select shop.district, name, SUM(price * quantity) as district
 from shop,purchase,buyer
@@ -547,7 +590,7 @@ group by shop.district,name
   <img src="https://imgur.com/5hCL2Oj.png" width="600">
 </p>
 
-c)
+c)	получить сводную информацию о сумме всех покупок, произведенных каждым покупателем;
 ```sql
 select surname, SUM(price * quantity)
 from purchase, buyer
@@ -558,9 +601,10 @@ group by surname, buyer.id
   <img src="https://imgur.com/Jlf0AT0.png" width="600">
 </p>
 
-d) В задании для каждого дня недели, 
+d)	определить для каждого дня недели количество книг, купленных покупателями не из Советского района .
+!!!В задании написано "для каждого дня недели", 
    однако у нас в таблице представлены 
-   только месяцы.
+   только месяцы.!!!
 ```sql
 select month, SUM(quantity) as amount
 from purchase, shop
