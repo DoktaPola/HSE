@@ -382,8 +382,8 @@ SELECT t.surname, max(t.amount) as Highest
     SELECT surname, SUM(quantity) amount
     from purchase, buyer	
 	where purchase.buyer = ALL(select purchase.buyer
-							   from purchase 
-							   where purchase.buyer = buyer.id)
+				   from purchase 
+				   where purchase.buyer = buyer.id)
 	group by surname, buyer.id
   )t
   group by t.surname
@@ -399,14 +399,14 @@ c)
 SELECT distinct surname, month, shop.district AS district 
 FROM purchase,shop,buyer
 WHERE buyer.district = ANY(SELECT district
-						   FROM buyer
-						   WHERE buyer.district = shop.district) 
+			   FROM buyer
+			   WHERE buyer.district = shop.district) 
 AND purchase.buyer = buyer.id
 AND purchase.seller = shop.id
 AND purchase.month = ANY(SELECT month
-						 FROM purchase
-						 WHERE purchase.month ='Март' or purchase.month = 'Апрель'
-						 or purchase.month = 'Май' or purchase.month = 'Июнь')
+			 FROM purchase
+			 WHERE purchase.month ='Март' or purchase.month = 'Апрель'
+			 or purchase.month = 'Май' or purchase.month = 'Июнь')
 ORDER BY surname 
 ```
 <p align="left">
@@ -459,7 +459,7 @@ WHERE purchase.seller != 1 and seller != 2))
   <img src="https://i.imgur.com/LAMK1hV.png" width="600">
 </p>
 
-b) до апреля ( в задании написан декабрь, но его нет в списке),
+b) До апреля не включительно ( в задании написан декабрь, но его нет в списке)  
    PS: вы разорешили выбрать другой месяц.
 ```sql
 SELECT distinct buyer
