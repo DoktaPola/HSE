@@ -365,11 +365,11 @@ a)
 SELECT *
 FROM buyer
 WHERE discount = ALL (SELECT MIN(discount)
-					  FROM buyer)
-					  AND id IN (SELECT purchase.buyer
-						   FROM purchase
-					 	   WHERE purchase.buyer = buyer.id
-						   AND purchase.price >= 50000)
+		      FROM buyer)
+		  AND id IN (SELECT purchase.buyer
+			     FROM purchase
+			     WHERE purchase.buyer = buyer.id
+			     AND purchase.price >= 50000)
 ```
 <p align="left">
   <img src="https://imgur.com/YcguBvN.png" width="600">
