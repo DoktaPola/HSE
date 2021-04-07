@@ -351,7 +351,7 @@ UPDATE purchase SET commission_fees = (SELECT shop.commission_fees FROM shop WHE
 SELECT * FROM purchase  -- проверка
 ```
 <p align="left">
-  <img src="https://imgur.com/3yfES2C.png" width="600">
+  <img src="https://i.imgur.com/o07GlaS.png" width="600">
 </p>
 
 ## Уровень 2.
@@ -370,8 +370,39 @@ where id not in (select buyer from purchase where month in ('Июнь'))
 
 b)	найти покупателей, покупавших книги в мае на сумму, меньшую чем купил Потапов в том же месяце;
 ```sql
-
+SELECT t.surname, t.sum1 as p_sum, month
+FROM
+(SELECT surname, SUM(price * quantity) sum1
+FROM  purchase, buyer, shop
+WHERE purchase.buyer = buyer.id
+and purchase.month IN ('Апрель')
+AND purchase.seller=shop.id
+GROUP BY surname, buyer.id )t, purchase, buyer
+where t.sum1 < (select distinct SUM(price * quantity)
+			   from purchase
+			   where purchase.buyer = 2
+			   and purchase.month IN ('Апрель'))
+and purchase.buyer = buyer.id
+and purchase.month in ('Апрель')
+GROUP BY t.surname, p_sum, month
 ```
+<p align="left">
+  <img src="https://i.imgur.com/GAwShq0.png" width="600">
+</p>
+
+* Проверка, что у Потапова цена в апреле была выше.
+```sql
+select distinct buyer.id, buyer.surname,
+				SUM(price * quantity), month
+from purchase, buyer
+where purchase.buyer = 2
+and purchase.buyer = buyer.id
+and purchase.month IN ('Апрель')
+GROUP BY buyer.id, surname, month
+```
+<p align="left">
+  <img src="https://i.imgur.com/ls3Swe3.png" width="600">
+</p>
 
 c)	реализовать запросы заданий 7.а, 7.с.
 ```sql
@@ -524,8 +555,60 @@ WHERE NOT EXISTS (
 </p>
 
 c)	определить покупателей, покупавших все книги, не продающиеся в магазине с максимальным значением комиссионных;
-d)	найти среди покупателей тех, кто не покупал с мае книг со ценой более 25000руб. 
-    в магазинах с максимальным размером комиссионных.
+```sql
+SELECT distinct buyer
+FROM purchase as buyer_id
+WHERE EXISTS (
+SELECT distinct purchase.buyer
+        	FROM purchase
+       	where buyer_id.buyer
+   		not in
+(select purchase.buyer from purchase where commission_fees = (
+   SELECT MAX (commission_fees)
+   FROM shop
+) ))
+```
+<p align="left">
+  <img src="https://i.imgur.com/DHqEdW4.png" width="600">
+</p>
+
+d)	найти среди покупателей тех, кто не покупал в мае книг со ценой более 25000 руб.
+(покупали в мае на сумму менее 25000) в магазинах с максимальным размером комиссионных.
+```sql
+SELECT distinct buyer
+FROM purchase as buyer_id
+WHERE EXISTS (
+SELECT distinct purchase.buyer
+        	FROM purchase
+       	where buyer_id.buyer
+       	in
+(select purchase.buyer from purchase where commission_fees = (
+   SELECT MAX (commission_fees)
+   FROM shop
+) and purchase.price < 25000 and purchase.month = 'Май'))
+```
+<p align="left">
+  <img src="https://i.imgur.com/BHgkeYu.png" width="600">
+</p>
+
+**Запрос оказался пустым.** 
+Вставим строку, где покупатель с id 6  купит в мае на сумму менее 25000(24000) в магазине с максимальными комиссионными (9)
+```sql 
+insert into purchase
+(order_number,month,seller,buyer,book,quantity,price,commission_fees)
+VALUES
+(10028,'Май',001,006,003,2,24000,9)
+```
+<p align="left">
+  <img src="https://i.imgur.com/sOYXPjg.png" width="600">
+</p>
+
+### Проверка
+**Повторим запрос**
+<p align="left">
+  <img src="https://i.imgur.com/cg4fK9b.png" width="600">
+</p>
+
 
 ### № 14.
 	Реализовать запросы с использованием аггрегатных функций:
