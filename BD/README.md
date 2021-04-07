@@ -487,8 +487,8 @@ FROM
 (SELECT surname, SUM(price * quantity) sum1
 FROM  purchase, buyer, shop
 WHERE purchase.buyer = ALL(SELECT purchase.buyer
-							FROM purchase 
-							WHERE purchase.buyer = buyer.id)
+			FROM purchase 
+			WHERE purchase.buyer = buyer.id)
 AND purchase.seller=shop.id
 AND buyer.district != shop.district
 GROUP BY surname, buyer.id )t, purchase, buyer
@@ -529,9 +529,9 @@ WHERE purchase.seller != 1 and seller != 2))
   <img src="https://i.imgur.com/LAMK1hV.png" width="600">
 </p>
 
-b)	найти покупателей, покупавших книги во всех магазинах своего района до декабря;
-!!! До апреля не включительно ( в задании написан декабрь, но его нет в списке)  
-   PS: вы разорешили выбрать другой месяц.!!!
+b)	найти покупателей, покупавших книги во всех магазинах своего района до декабря;  
+**!!!** До апреля не включительно ( в задании написан декабрь, но его нет в списке)  
+   PS: вы разорешили выбрать другой месяц.**!!!**
 ```sql
 SELECT distinct buyer
 FROM purchase as buyer_id
@@ -591,7 +591,7 @@ SELECT distinct purchase.buyer
   <img src="https://i.imgur.com/BHgkeYu.png" width="600">
 </p>
 
-**Запрос оказался пустым.** 
+**Запрос оказался пустым.**  
 Вставим строку, где покупатель с id 6  купит в мае на сумму менее 25000(24000) в магазине с максимальными комиссионными (9)
 ```sql 
 insert into purchase
@@ -684,10 +684,10 @@ group by surname, buyer.id
   <img src="https://imgur.com/Jlf0AT0.png" width="600">
 </p>
 
-d)	определить для каждого дня недели количество книг, купленных покупателями не из Советского района .
-!!!В задании написано "для каждого дня недели", 
+d)	определить для каждого дня недели количество книг, купленных покупателями не из Советского района.  
+**!!!** В задании написано "для каждого дня недели", 
    однако у нас в таблице представлены 
-   только месяцы.!!!
+   только месяцы.**!!!**
 ```sql
 select month, SUM(quantity) as amount
 from purchase, shop
