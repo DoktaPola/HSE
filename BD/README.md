@@ -196,7 +196,7 @@ SELECT title, price
 FROM books;
 ```
 <p align="left">
-  <img src="https://imgur.com/datu2uW.png" width="600">
+  <img src="https://i.imgur.com/g516sk3.png" width="600">
 </p>
 
 b) всех различных районов, в которых проживают покупатели;
@@ -253,7 +253,7 @@ ORDER BY  price DESC
 
 ### № 6.
 	Для каждой покупки вывести следующие данные:
-a)  фамилию покупателя и название магазина, где производилась покупка;
+a)  фамилию покупателя и название магазина, где производилась покупка;  
 **PS:** Так как у нас два разных Попова, для уточнения мы выводим id и купленный товар.
 ```sql
 SELECT distinct order_number, title as BookName, purchase.buyer as bID, surname, name as ShopName
@@ -279,10 +279,10 @@ where purchase.buyer=buyer.id and books.id=purchase.book
 a)	номер заказа, фамилию покупателя и дату для покупок в которых было продано книг на сумму не меньшую чем 60000 руб.
 ```sql
 SELECT order_number,surname,month from purchase,buyer
-where purchase.price > 60000 and buyer.id = purchase.buyer
+where purchase.price >= 60000 and buyer.id = purchase.buyer
 ```
 <p align="left">
-  <img src="https://i.imgur.com/O7UTVK2.png" width="600">
+  <img src="https://i.imgur.com/lHmmpDL.png" width="600">
 </p>
 
 b)	покупки, сделанные покупателем в своем районе не ранее марта месяца.
@@ -361,15 +361,17 @@ SELECT * FROM purchase  -- проверка
 	Используя операцию IN (NOT IN)  реализовать следующие запросы:
 a)	найти покупателей, которые не покупали книг в магазинах Нижегородского района в июне месяце;
 ```sql
-select * 
-from buyer
-where id not in (select buyer from purchase where month in ('Июнь'))
+select buyer.id, surname, shop.district, month from buyer, shop, purchase
+where buyer.id not in (select buyer from purchase, shop where month in ('Июнь') 
+and purchase.buyer =  buyer.id and purchase.seller = shop.id and shop.district = 'Нижегородский')
+and purchase.buyer =  buyer.id and purchase.seller = shop.id
 ```
 <p align="left">
-  <img src="https://imgur.com/ebZsQlk.png" width="600">
+  <img src="https://i.imgur.com/GbkAZqP.png" width="600">
 </p>
 
-b)	найти покупателей, покупавших книги в мае на сумму, меньшую чем купил Потапов в том же месяце;
+b)	найти покупателей, покупавших книги в мае на сумму, меньшую чем купил Потапов в том же месяце;  
+**PS:** Попов не покупал книг в мае, поэтому мы взяли месяц апрель.
 ```sql
 SELECT t.surname, t.sum1 as p_sum, month
 FROM
@@ -407,12 +409,13 @@ GROUP BY buyer.id, surname, month
 
 c)	реализовать запросы заданий 7.а, 7.с.
 ```sql
--- (7a)
+-- 7(а)
 SELECT distinct order_number, surname , month from purchase,buyer
-where purchase.price > 60000 and surname in (select surname from buyer where buyer.id = purchase.buyer);
+where purchase.price >= 60000 and surname in 
+(select surname from buyer where buyer.id = purchase.buyer);
 ```
 <p align="left">
-  <img src="https://imgur.com/dASlhJ7.png" width="600">
+  <img src="https://i.imgur.com/ioEh3ta.png" width="600">
 </p>
 
 ```sql
@@ -530,7 +533,7 @@ WHERE purchase.seller != 1 and seller != 2))
   <img src="https://i.imgur.com/LAMK1hV.png" width="600">
 </p>
 
-b)	найти покупателей, покупавших книги во всех магазинах своего района до декабря;  
+b)	найти покупателей, покупавших книги в магазинах своего района до декабря;  
 **!!!** До апреля не включительно ( в задании написан декабрь, но его нет в списке)  
    PS: вы разорешили выбрать другой месяц.**!!!**
 ```sql
@@ -586,7 +589,7 @@ SELECT distinct purchase.buyer
 (select purchase.buyer from purchase where commission_fees = (
    SELECT MAX (commission_fees)
    FROM shop
-) and purchase.price < 25000 and purchase.month = 'Май'))
+) and purchase.price <= 25000 and purchase.month = 'Май'))
 ```
 <p align="left">
   <img src="https://i.imgur.com/BHgkeYu.png" width="600">
@@ -607,7 +610,7 @@ VALUES
 ### Проверка
 **Повторим запрос**
 <p align="left">
-  <img src="https://i.imgur.com/cg4fK9b.png" width="600">
+  <img src="https://i.imgur.com/im9bjmM.png" width="600">
 </p>
 
 
@@ -633,10 +636,10 @@ where purchase.seller=shop.id and shop.name='Наука'
 c)	найти покупателей имеющих скидку ниже средней;
 ```sql
 select avg(discount) from buyer;
-select * from buyer where discount > (select avg(discount) from buyer)
+select * from buyer where discount < (select avg(discount) from buyer)
 ```
 <p align="left">
-  <img src="https://imgur.com/c5MoEcM.png" width="600">
+  <img src="https://i.imgur.com/rAh0BTq.png" width="600">
 </p>
 
 d)	определить магазины, в которых покупало книги больше покупателей чем в магазине “Наука”;
