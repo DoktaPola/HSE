@@ -254,6 +254,7 @@ ORDER BY  price DESC
 ### № 6.
 	Для каждой покупки вывести следующие данные:
 a)  фамилию покупателя и название магазина, где производилась покупка;
+**PS:** Так как у нас два разных Попова, для уточнения мы выводим id и купленный товар.
 ```sql
 SELECT distinct order_number, title as BookName, purchase.buyer as bID, surname, name as ShopName
 from buyer,shop,purchase,books
