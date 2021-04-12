@@ -580,41 +580,54 @@ SELECT distinct purchase.buyer
   <img src="https://i.imgur.com/DHqEdW4.png" width="600">
 </p>
 
-d)	найти среди покупателей тех, кто не покупал в мае книг со ценой более 25000 руб.
-(покупали в мае на цену менее или равную 25000) в магазинах с максимальным размером комиссионных.
+d)	найти среди покупателей тех, кто не покупал в мае книг со ценой более 25000 руб. в магазинах
+ с максимальным размером комиссионных.  
+ 
+ **PS:** Мы сначала не поняли, что нужно искать сумму ВСЕХ покупок одногу человека за Май искать и не складывали.
+ Поэтому после пустого ответа на запрос, мы добавили неправильную строчку (фото приложено ниже). 
+ Потом мы исправили код и добавили нужные данные. Все стало работать корректно.
 ```sql
 SELECT distinct buyer
 FROM purchase as buyer_id
 WHERE EXISTS (
-SELECT distinct purchase.buyer
-        	FROM purchase
-       	where buyer_id.buyer
-       	in
-(select purchase.buyer from purchase where commission_fees = (
-   SELECT MAX (commission_fees)
-   FROM shop
-) and purchase.price <= 25000 and purchase.month = 'Май'))
+ 			SELECT distinct purchase.buyer
+          	FROM purchase
+         	where buyer_id.buyer
+         	in
+  (select distinct buyer.id
+	from (select distinct buyer.id, SUM(price) as sum1
+		 from purchase, buyer, shop
+	 	 WHERE purchase.buyer = buyer.id
+	     and purchase.seller = shop.id and purchase.month = 'Май'
+	     group by buyer.id)t, buyer
+    where t.sum1 <= 25000 and buyer.id = t.id))
 ```
 <p align="left">
-  <img src="https://i.imgur.com/BHgkeYu.png" width="600">
+  <img src="https://i.imgur.com/8xqK4Xx.png" width="600">
 </p>
 
 **Запрос оказался пустым.**  
-Вставим строку, где покупатель с id 6  купит в мае на сумму менее 25000(24000) в магазине с максимальными комиссионными (9)
+**В первый раз мы вставили строку, где покупатель с id 6  купит в мае на сумму
+ менее 25000(24000) в магазине с максимальными комиссионными (9)**
+ 
 ```sql 
 insert into purchase
 (order_number,month,seller,buyer,book,quantity,price,commission_fees)
 VALUES
 (10028,'Май',001,006,003,2,24000,9)
 ```
-<p align="left">
-  <img src="https://i.imgur.com/sOYXPjg.png" width="600">
-</p>
+**После изменения кода, мы вставили новые данные, покупателя с id 2
+купит в мае на сумму менее 25000(24000) в магазине с максимальными комиссионными (9).**  
+```sql
+insert into purchase
+(order_number,month,seller,buyer,book,quantity,price,commission_fees)
+ VALUES (10029,'Май',001,002,003,2,24000,9)
+```
 
 ### Проверка
 **Повторим запрос**
 <p align="left">
-  <img src="https://i.imgur.com/im9bjmM.png" width="600">
+  <img src="https://i.imgur.com/R2XeVA5.png" width="600">
 </p>
 
 
