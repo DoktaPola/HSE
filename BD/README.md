@@ -319,13 +319,14 @@ d)	данные по покупке книг (название, район ск�
 ```sql
 SELECT DISTINCT books.title, books.price, books.repo, purchase.quantity 
 FROM books, purchase, shop
-WHERE purchase.book = books.id  -- район складирования 
-and purchase.seller = shop.id  -- район складирования 
+WHERE purchase.book = books.id
+and purchase.seller = shop.id 
+and shop.district = books.repo
 and books.quantity > 10 
 ORDER BY books.price ASC
 ```
 <p align="left">
-  <img src="https://imgur.com/DoKNgm3.png" width="600">
+  <img src="https://i.imgur.com/Q7xX6b9.png" width="600">
 </p>
 
 ### № 8.
@@ -375,13 +376,13 @@ b)	найти покупателей, покупавших книги в мае 
 ```sql
 SELECT t.surname, t.sum1 as p_sum, month
 FROM
-(SELECT surname, SUM(price * quantity) sum1
+(SELECT surname, SUM(price) sum1
 FROM  purchase, buyer, shop
 WHERE purchase.buyer = buyer.id
 and purchase.month IN ('Апрель')
 AND purchase.seller=shop.id
 GROUP BY surname, buyer.id )t, purchase, buyer
-where t.sum1 < (select distinct SUM(price * quantity)
+where t.sum1 < (select distinct SUM(price)
 			   from purchase
 			   where purchase.buyer = 2
 			   and purchase.month IN ('Апрель'))
@@ -390,13 +391,13 @@ and purchase.month in ('Апрель')
 GROUP BY t.surname, p_sum, month
 ```
 <p align="left">
-  <img src="https://i.imgur.com/GAwShq0.png" width="600">
+  <img src="https://i.imgur.com/J4GVqyx.png" width="600">
 </p>
 
 * Проверка, что у Потапова цена в апреле была выше.
 ```sql
 select distinct buyer.id, buyer.surname,
-				SUM(price * quantity), month
+				SUM(price), month
 from purchase, buyer
 where purchase.buyer = 2
 and purchase.buyer = buyer.id
@@ -404,7 +405,7 @@ and purchase.month IN ('Апрель')
 GROUP BY buyer.id, surname, month
 ```
 <p align="left">
-  <img src="https://i.imgur.com/ls3Swe3.png" width="600">
+  <img src="https://i.imgur.com/GBb7sjq.png" width="600">
 </p>
 
 c)	реализовать запросы заданий 7.а, 7.с.
@@ -437,13 +438,16 @@ SELECT *
 FROM buyer
 WHERE discount = ALL (SELECT MIN(discount)
 		      FROM buyer)
-		  AND id IN (SELECT purchase.buyer
-			     FROM purchase
+		  AND id IN 
+		  (SELECT distinct purchase.buyer
+		   FROM (Select distinct buyer.id, SUM(price) sum1
+				 from purchase, buyer
 			     WHERE purchase.buyer = buyer.id
-			     AND purchase.price >= 50000)
+				group by buyer.id)t, purchase
+				WHERE t.sum1 >= 50000)
 ```
 <p align="left">
-  <img src="https://imgur.com/YcguBvN.png" width="600">
+  <img src="https://i.imgur.com/Epp0aLQ.png" width="600">
 </p>
 
 b)	найти покупателя, покупавшего самое большое количество книг;
@@ -488,11 +492,11 @@ d)	какой из покупателей не покупавший книг в 
 ```sql
 SELECT t.surname, MIN(t.sum1) AS Lowest
 FROM
-(SELECT surname, SUM(price * quantity) sum1
+(SELECT surname, SUM(price) sum1
 FROM  purchase, buyer, shop
 WHERE purchase.buyer = ALL(SELECT purchase.buyer
-			FROM purchase 
-			WHERE purchase.buyer = buyer.id)
+							FROM purchase 
+							WHERE purchase.buyer = buyer.id)
 AND purchase.seller=shop.id
 AND buyer.district != shop.district
 GROUP BY surname, buyer.id )t, purchase, buyer
@@ -501,7 +505,7 @@ ORDER BY Lowest ASC
 LIMIT 1
 ```
 <p align="left">
-  <img src="https://imgur.com/bdAGXdO.png" width="600">
+  <img src="https://i.imgur.com/rLeoSEX.png" width="600">
 </p>
 
 ### № 12.
@@ -577,7 +581,7 @@ SELECT distinct purchase.buyer
 </p>
 
 d)	найти среди покупателей тех, кто не покупал в мае книг со ценой более 25000 руб.
-(покупали в мае на сумму менее или равную 25000) в магазинах с максимальным размером комиссионных.
+(покупали в мае на цену менее или равную 25000) в магазинах с максимальным размером комиссионных.
 ```sql
 SELECT distinct buyer
 FROM purchase as buyer_id
@@ -618,10 +622,13 @@ VALUES
 	Реализовать запросы с использованием аггрегатных функций:
 a)	получить среднюю стоимость покупок, сделанных в магазинах Нижегородского района;
 ```sql
-select avg(price) from purchase;
+select avg(price)
+from purchase, shop
+where shop.district = 'Нижегородский'
+and shop.id = purchase.seller;
 ```
 <p align="left">
-  <img src="https://imgur.com/4ivmm3X.png" width="600">
+  <img src="https://i.imgur.com/Vky1KGC.png" width="600">
 </p>
 
 b)	найти количество покупателей, покупавших книги в магазине “Наука”;
@@ -657,35 +664,35 @@ where purchase.seller=shop.id and shop.name='Наука'))
     Используя средства группировки реализовать следующие запросы:
 a)	вывести данные по суммарной стоимости книг, купленных в каждом магазине;
 ```sql
-select name, SUM(price * quantity)
+select name, SUM(price )
 from shop,purchase,buyer
 where purchase.seller=shop.id and purchase.buyer=buyer.id
-group by name
+group by name, shop.id
 ```
 <p align="left">
-  <img src="https://imgur.com/gP5YLdW.png" width="600">
+  <img src="https://i.imgur.com/mRgqejz.png" width="600">
 </p>
 
 b)	вывести отчет о суммарной стоимости всех купленных книг по районам, где расположены магазины;
 ```sql
-select shop.district, name, SUM(price * quantity) as district
+select shop.district, name, SUM(price) as district
 from shop,purchase,buyer
 where purchase.seller=shop.id and purchase.buyer=buyer.id
 group by shop.district,name
 ```
 <p align="left">
-  <img src="https://imgur.com/5hCL2Oj.png" width="600">
+  <img src="https://i.imgur.com/DdjCGg4.png" width="600">
 </p>
 
 c)	получить сводную информацию о сумме всех покупок, произведенных каждым покупателем;
 ```sql
-select surname, SUM(price * quantity)
+select surname, SUM(price)
 from purchase, buyer
 where purchase.buyer=buyer.id
 group by surname, buyer.id
 ```
 <p align="left">
-  <img src="https://imgur.com/Jlf0AT0.png" width="600">
+  <img src="https://i.imgur.com/MYFmjDp.png" width="600">
 </p>
 
 d)	определить для каждого дня недели количество книг, купленных покупателями не из Советского района.  
