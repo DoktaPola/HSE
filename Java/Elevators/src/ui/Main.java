@@ -168,20 +168,17 @@ public class Main extends Application {
         Font font = Font.font("Courier New", FontWeight.BOLD, 14);
         elvAmountTxt.setFont(font);
         hbox.getChildren().add(elvAmountTxt);
-        ///////////////
+        //
         Text flrAmountTxt = new Text();
         flrAmountTxt.setId("floors_am_txt");
         flrAmountTxt.setText("FLOORS IN BUILDING: " + val2.getText());
-//        flrAmountTxt.setStyle("-fx-text-fill : #f2f1f3;");
-//        Font font2 = Font.font("Courier New", FontWeight.BOLD, 14);
-//        flrAmountTxt.setFont(font2);
         hbox.getChildren().add(flrAmountTxt);
-        //////////////
+       
 
         TextArea ta = new TextArea();
         ta.setId("console_output");
 
-        Console console = new Console(ta);  /////////////////// THINK !!!!!!!
+        Console console = new Console(ta);
 
         PrintStream ps = new PrintStream(console, true);
 
